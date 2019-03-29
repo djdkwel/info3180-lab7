@@ -68,6 +68,7 @@ def upload():
         return jsonify({"errors":error})
 
     return app.send_static_file('index.html')
+    
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
