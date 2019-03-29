@@ -12,10 +12,44 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
+          <li class="nav-item active"> 
+              <router-link class="nav-link" to="/upload-form">Form</router-link> 
+            </li>
+            
         </ul>
       </div>
     </nav>
     `
+});
+
+const upload_form = Vue.component( 'uploadform',{
+    template:`
+    <div class="app">
+       <form action="/api/upload" method="POST" @submit.prevent="UploadPhoto">
+         <input type="image" name="Photo">
+         <input type="text" name="description">
+         <input type="submit" value="Submit">
+        </form>
+      </div>`,
+    created: function(){
+        
+        fetch("/api/upload", {    
+            method: 'POST'
+        })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonResponse) {  
+            // display a success message         
+            console.log(jsonResponse);
+        })
+        .catch(function (error) {
+            console.log(error)
+
+        })
+        
+    }
+    
 });
 
 Vue.component('app-footer', {
@@ -26,6 +60,7 @@ Vue.component('app-footer', {
         </div>
     </footer>
     `
+   
 });
 
 const Home = Vue.component('home', {
@@ -64,7 +99,7 @@ const router = new VueRouter({
 });
 
 // Instantiate our main Vue Instance
-let app = new Vue({
-    el: "#app",
+const app = new Vue({
+    el: '#app',
     router
 });
