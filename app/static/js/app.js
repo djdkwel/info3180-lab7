@@ -24,18 +24,29 @@ Vue.component('app-header', {
 
 const upload_form = Vue.component('upload',{
     template:`
-    <div>
-       <form action="/api/upload" method="POST" @submit.prevent="UploadPhoto">
-           <input type="photo" name="UploadPhoto" value="">
-           <input type="text" name="" value="">
+    <div class="form-inline d-flex justify-content-cent">
+       <form action="/api/upload" method="POST" @submit.prevent="UploadPhoto" id="UploadForm">
+           <br></br>
+           <input type="text" name="description" value="">
+           <br></br>
+           <input type="file" name="photo" value="">
+           <br></br>
            <input type="submit" value="Submit">
         </form>
       </div>
       `,
+     
     methods:{
-        uploadPhoto: function(){
+        UploadPhoto: function(){
+            let UploadForm = document.getElementById('UploadForm');
+            let form_data = new FormData(UploadForm)
             fetch("/api/upload", { 
-                method: 'POST'
+                method: 'POST',
+                body: form_data,
+                headers:{
+                    'X-CSRFToken': token
+                },
+                credentials: 'same-origin'
             })
             .then(function (response) { 
                 return response.json(); 
@@ -44,8 +55,8 @@ const upload_form = Vue.component('upload',{
                 // display a success message
                 console.log(jsonResponse);
             })
-                .catch(function (error) { 
-                    console.log(error);
+                .catch(function(errors) { 
+                    console.log(errors); 
             });
         
         }

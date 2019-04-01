@@ -57,15 +57,15 @@ def upload():
     if request.method == 'POST' and form.validate_on_submit():
         photo = form.photo.data
         filename = secure_filename(photo.filename)
-        message = form.message.data
+        message = request.form['description']
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
         return jsonify({"message": "File Upload Successful",   
-                "filename": "you-uploaded-file.jpg" ,
-                "description": "Some description for your image."})
+                "filename": filename,
+                "description": message})
     
     else:
-        error=form_errors(form)
-        return jsonify({"errors":error})
+        errors=form_errors(form)
+        return jsonify({"errors":errors})
 
     return app.send_static_file('index.html')
     
